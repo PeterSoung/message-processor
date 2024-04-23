@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "type": "Room is ready",
+    "message": "{greeting} {first_name} {last_name} Welcome to the {hotel}. Room {room_number} is ready for you."
+  },
+  {
+     "id": "2",
+     "type": "Room not ready",
+     "message": "{greeting} {first_name} {last_name}. Sorry for the delay but room {room_number} is still being prepared for you."
+  }
+]
