@@ -2,9 +2,11 @@
 
 **Instructions:** Run the main function. 
 This should bring up the GUI with the necessary fields to either type or select.
-1. When selecting a guest, the first_name, last_name and room_number fields will populate with the guest data.
-2. You may create your own message or use one of the pre-loaded message templates.
-3. The greeting is based on your local time, so depending on when the message is sent, the greetings will be different.
+
+1. Install python-tk using brew install python-tk
+2. When selecting a guest, the first_name, last_name and room_number fields will populate with the guest data.
+3. You may create your own message or use one of the pre-loaded message templates.
+4. The greeting is based on your local time, so depending on when the message is sent, the greetings will be different.
 
 **Design Process:**
 From the beginning I knew I wanted to use a GUI. I wanted the user to be able to see and select their option
