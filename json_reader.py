@@ -1,5 +1,4 @@
 import json
-import logging
 import re
 
 import company
@@ -7,55 +6,58 @@ import guest
 import message
 
 
-def open_json_file(file_name):
-    """
-    Opens up a specified json file
-    :param file_name: the name of the file to open
-    :return: a str of the contents of the file
-    """
-    if ".json" in file_name:
-        file = open(file_name)
-        data = json.load(file)
-        file.close()
-        return data
-    elif ".json" not in file_name:
-        return "Your file could not be found"
+class Json_reader:
+    def __init__(self, file_name):
+        self.file_name = file_name
+        self.json_list = []
 
-def create_list_of_guest(json_list):
-    list_of_guest = []
+    def open_json_file(self):
+        """
+        Opens up a specified json file
+        :return: a str of the contents of the file
+        """
 
-    for x in json_list:
-        first_name = parse_data("firstName", str(x))
-        last_name = parse_data("lastName", str(x))
-        room_number = parse_data("roomNumber", str(x))
+        if ".json" in self.file_name:
+            file = open(self.file_name)
+            data = json.load(file)
+            file.close()
+            self.json_list = data
+        elif ".json" not in self.file_name:
+            return "Your file could not be found"
 
-        list_of_guest.append(guest.Guest(first_name, last_name, room_number))
+    def create_list_of_guest(self):
+        list_of_guest = []
 
-    return list_of_guest
+        for x in self.json_list:
+            first_name = parse_data("firstName", str(x))
+            last_name = parse_data("lastName", str(x))
+            room_number = parse_data("roomNumber", str(x))
 
+            list_of_guest.append(guest.Guest(first_name, last_name, room_number))
 
-def create_list_of_companies(json_list):
-    list_of_companies = []
+        return list_of_guest
 
-    for x in json_list:
-        company_name = parse_data("company", str(x))
-        company_id = parse_data("id", str(x))
+    def create_list_of_companies(self):
+        list_of_companies = []
 
-        list_of_companies.append(company.Company(company_name, company_id))
+        for x in self.json_list:
+            company_name = parse_data("company", str(x))
+            company_id = parse_data("id", str(x))
 
-    return list_of_companies
+            list_of_companies.append(company.Company(company_name, company_id))
 
+        return list_of_companies
 
-def create_list_of_messages(json_list):
-    list_of_messages = []
+    def create_list_of_messages(self):
+        list_of_messages = []
 
-    for x in json_list:
-        message_text = parse_data("message", str(x))
-        message_type = parse_data("type", str(x))
+        for x in self.json_list:
+            message_text = parse_data("message", str(x))
+            message_type = parse_data("type", str(x))
 
-        list_of_messages.append(message.Message(message_text, message_type))
+            list_of_messages.append(message.Message(message_text, message_type))
 
-    return list_of_messages
+        return list_of_messages
 
 
 def parse_data(identifier, string):

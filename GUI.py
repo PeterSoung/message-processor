@@ -1,3 +1,4 @@
+import logging
 import tkinter
 from tkinter.constants import END
 
@@ -27,71 +28,113 @@ class GUI:
         self.frame.pack(pady=20, padx=60, fill="both", expand=True)
 
         # widgets
-        self.label = customtkinter.CTkLabel(self.root, text="Kipsu Welcome Message")
+        self.label = customtkinter.CTkLabel(self.root, text="Message Processor")
         self.label.pack(pady=12, padx=10)
 
         self.first_name_var = customtkinter.StringVar()
 
+        self.first_name_label = customtkinter.CTkLabel(self.root, text="Guest First Name", bg_color="transparent")
+        self.first_name_label.place(x=100, y=25)
         self.first_name_textfield = customtkinter.CTkEntry(self.root, textvariable=self.first_name_var)
         self.first_name_textfield.place(x=100, y=50)
 
         self.last_name_var = customtkinter.StringVar()
 
+        self.last_name_label = customtkinter.CTkLabel(self.root, text="Guest Last Name")
+        self.last_name_label.place(x=250, y=25)
         self.last_name_textfield = customtkinter.CTkEntry(self.root, textvariable=self.last_name_var)
-        self.last_name_textfield.place(x=100, y=100)
+        self.last_name_textfield.place(x=250, y=50)
 
         self.room_number_var = customtkinter.StringVar()
 
+        self.room_number_label = customtkinter.CTkLabel(self.root, text="Room Number")
+        self.room_number_label.place(x=100, y=100)
         self.room_number_textfield = customtkinter.CTkEntry(self.root, textvariable=self.room_number_var)
-        self.room_number_textfield.place(x=100, y=150)
+        self.room_number_textfield.place(x=100, y=125)
 
         self.message_var = customtkinter.StringVar()
 
-        self.message_textfield = customtkinter.CTkTextbox(self.root, height=175, width=600,)
-        self.message_textfield.place(x=100, y=200)
+        self.message_textfield = customtkinter.CTkTextbox(self.root, height=225, width=600, )
+        self.message_textfield.place(x=100, y=180)
 
         self.message_template_var = customtkinter.StringVar()
         self.message_template_var.set("Select an option")
 
+        self.message_template_label = customtkinter.CTkLabel(self.root, text="Message Template Selection")
+        self.message_template_label.place(x=100, y=425)
         self.message_template_scrollbar = customtkinter.CTkOptionMenu(self.root,
                                                                       values=GUI.fill_message_template_list(self),
                                                                       variable=self.message_template_var,
                                                                       command=self.update_message_textfield
                                                                       )
-        self.message_template_scrollbar.place(x=100, y=400)
+        self.message_template_scrollbar.place(x=100, y=450)
 
         self.company_var = customtkinter.StringVar()
         self.company_var.set("Select a Company")
 
+        self.company_scrollbar_label = customtkinter.CTkLabel(self.root, text="Company Options")
+        self.company_scrollbar_label.place(x=800, y=25)
         self.company_scrollbar = customtkinter.CTkOptionMenu(self.root,
                                                              values=GUI.fill_company_list(self),
                                                              variable=self.company_var)
         self.company_scrollbar.place(x=800, y=50)
 
+        self.guest_scrollbar_label = customtkinter.CTkLabel(self.root, text="Guest Selection")
+        self.guest_scrollbar_label.place(x=800, y=100)
         self.guest_scrollbar = customtkinter.CTkOptionMenu(self.root,
                                                            values=GUI.fill_guest_list(self),
                                                            command=self.update_guest_info_textfield
                                                            )
-        self.guest_scrollbar.place(x=800, y=100)
+        self.guest_scrollbar.place(x=800, y=125)
 
         self.send_button = customtkinter.CTkButton(self.root, text="Send Message", command=self.send_message)
-        self.send_button.place(x=800, y=400)
+        self.send_button.place(x=800, y=450)
 
         self.root.mainloop()
 
     def send_message(self):
         greeting = message.change_greeting()
-        first_name = self.first_name_var.get()
-        last_name = self.last_name_var.get()
-        room_number = self.room_number_var.get()
-        company = self.company_var.get()
+        first_name = ""
+        last_name = ""
+        room_number = ""
+        company = ""
+        sending_message = True
+
+        if self.first_name_var.get() == "":
+            logging.error("You are missing the guest first name. Please enter a guest first name and try again.")
+            sending_message = False
+        else:
+            first_name = self.first_name_var.get()
+
+        if self.last_name_var.get() == "":
+            logging.error("You are missing the guest last name. Please enter a guest last name and try again.")
+            sending_message = False
+        else:
+            last_name = self.last_name_var.get()
+
+        if self.room_number_var.get() == "":
+            logging.error("You are missing the room number. Please enter a room number and try again.")
+            sending_message = False
+        else:
+            room_number = self.room_number_var.get()
+
+        if self.company_var.get() == "Select a Company":
+            logging.error("Please select a company site and try again.")
+            sending_message = False
+        else:
+            company = self.company_var.get()
 
         text = self.message_textfield.get("1.0", END)
-        print(text.format(greeting=greeting,
-                          first_name=first_name,
-                          last_name=last_name,
-                          room_number=room_number,
-                          hotel=company))
+
+        if sending_message:
+            try:
+                print(text.format(greeting=greeting,
+                                  first_name=first_name,
+                                  last_name=last_name,
+                                  room_number=room_number,
+                                  hotel=company))
+            except KeyError as e:
+                logging.error(f"{e} is an unknown variable in the message. Please try again.")
 
     def update_guest_info_textfield(self, text):
         room_number = ""
