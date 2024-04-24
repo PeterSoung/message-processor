@@ -12,7 +12,7 @@ and how that was going to be implemented into the textfields. I ended up using C
 portion, since it was a modernized version of Tkinter, a commonly used python framework, to build GUIs.
 After having selected the tools to build out the GUI, I wanted to be able to store that values in some sort of database,
 but for a project this size, this might have been unreasonable. So instead, I went ahead with storing the values in Class objects
-of each other file that we were expected to use. From there it was just logic and connecting the GUI to the
+of each of the other file that we were expected to use. From there it was just logic and connecting the GUI to the
 different class objects.
 
 **Language decision:**
